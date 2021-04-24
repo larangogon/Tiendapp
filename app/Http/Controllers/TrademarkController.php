@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Brand;
+use App\Models\Trademark;
 use Illuminate\Http\Request;
 
-class BrandController extends Controller
+class TrademarkController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +41,10 @@ class BrandController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\Trademark  $trademark
      * @return \Illuminate\Http\Response
      */
-    public function show(Brand $brand)
+    public function show(Trademark $trademark)
     {
         //
     }
@@ -52,10 +52,10 @@ class BrandController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\Trademark  $trademark
      * @return \Illuminate\Http\Response
      */
-    public function edit(Brand $brand)
+    public function edit(Trademark $trademark)
     {
         //
     }
@@ -64,10 +64,10 @@ class BrandController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\Trademark  $trademark
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Brand $brand)
+    public function update(Request $request, Trademark $trademark)
     {
         //
     }
@@ -75,10 +75,10 @@ class BrandController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Brand  $brand
+     * @param  \App\Models\Trademark  $trademark
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Brand $brand)
+    public function destroy(Trademark $trademark)
     {
         //
     }
