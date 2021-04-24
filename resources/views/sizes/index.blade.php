@@ -5,7 +5,6 @@
     <div class="row">
         <div class="col-md-4 mx-auto">
             <h2>Tallas del producto
-                @include('sizes.modal')
             </h2>
             <table class="table table-sm table-hover">
                 <thead>

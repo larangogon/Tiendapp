@@ -9,15 +9,11 @@ use Illuminate\View\View;
 
 class SizeController extends Controller
 {
-    protected $sizes;
-
     /**
      * SizeController constructor.
-     * @param InterfaceSizes $sizes
      */
-    public function __construct(InterfaceSizes $sizes)
+    public function __construct()
     {
-        $this->sizes = $sizes;
         $this->middleware('auth');
         $this->middleware('verified');
         $this->middleware('Status');
@@ -45,7 +41,7 @@ class SizeController extends Controller
     {
         $this->authorize('size.store');
 
-        $this->sizes->store($request);
+        $size = Size::create($request->all());
 
         return redirect('sizes');
     }

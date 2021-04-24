@@ -201,7 +201,7 @@
                 @enderror
             </div>
             <button type="submit" class="btn btn-block btn-primary btn-sm">
-                guardar
+                Guardar
             </button>
         </div>
     </div>
