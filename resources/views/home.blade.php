@@ -16,6 +16,13 @@
 
                     {{ __('You are logged in!') }}
                 </div>
+                <a href="{{url('users')}}" class="nav-link"
+                   class="{{ Request::path() === '/' ? 'nav-link active' : 'nav-link' }}">
+                    <i class="far fa-check-circle"></i>
+                    <button type="button" class="btn btn-success btn-sm btn-block float-right">
+                        Usuarios
+                    </button>
+                </a>
             </div>
         </div>
     </div>
