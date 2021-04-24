@@ -36,5 +36,8 @@ Route::get('products/destroyimagen/{imagen_id}/{product_id}', [App\Http\Controll
 Route::resource('trademarks', 'App\Http\Controllers\TrademarkController')
     ->only(['index', 'store', 'destroy', 'update', 'edit', 'create']);
 
+Route::resource('sizes', 'App\Http\Controllers\SizeController')
+    ->only(['index', 'store']);
+
 
 

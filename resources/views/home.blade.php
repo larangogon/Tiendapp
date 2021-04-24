@@ -37,6 +37,13 @@
                         Marcas
                     </button>
                 </a>
+                <a href="{{url('sizes')}}" class="nav-link"
+                   class="{{ Request::path() === '/' ? 'nav-link active' : 'nav-link' }}">
+                    <i class="far fa-check-circle"></i>
+                    <button type="button" class="btn btn-success btn-sm btn-block float-right">
+                        Tallas
+                    </button>
+                </a>
             </div>
         </div>
     </div>

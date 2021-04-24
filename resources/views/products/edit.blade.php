@@ -39,12 +39,12 @@
                                         @csrf
                                         <img src="../../../uploads/{{ $img->name }}" width="200" class="img-fluid">
                                         <button type="submit" class="btn btn-danger btn-sm">
-                                            {!! trans('messages.Destroy') !!}
+                                            Eliminar
                                         </button>
                                     </form>
                                 @endforeach
                             @else
-                                {!! trans('messages.An image has not been uploaded for this product yet') !!}
+                                'messages.An image has not been uploaded for this product yet'
                         @endif
                     </div>
                 </div>
