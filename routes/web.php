@@ -18,13 +18,12 @@ Route::get('/', function () {
 });
 
 Auth::routes();
-
+Auth::routes(['verify' => true]);
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])
+    ->name('home');
+Route::resource('users', 'App\Http\Controllers\UsersController');
 
-Auth::routes();
+Route::get('users/{user}/active', [App\Http\Controllers\UsersController::class, 'active'])
+    ->name('users.active');
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
-
-Auth::routes();
-
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
