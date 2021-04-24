@@ -35,19 +35,18 @@
                 <tr>
                     <th scope="row">{{$user->id}}</th>
                     <td>{{$user->name}}</td>
-                    <td>{{$user->document}}</td>
                     <td>{{$user->email}}</td>
-                    <td>{{trans($user->roles->implode('name',', '))}}</td>
+                    <td>{{$user->roles->implode('name',', ')}}</td>
                     <td>
                         <form action= "{{ route('users.active',  $user->id)}}" method = "POST">
                             <a href="{{route('users.show', $user->id) }}">
                                 <button type="button" class="btn btn-dark btn-sm">
-                                    {!! trans('messages.Show') !!}
+                                    Ver
                                 </button>
                             </a>
                             <a href="{{ route('users.edit', $user->id) }}">
                                 <button type="button" class="btn btn-primary btn-sm">
-                                    {!! trans('messages.Edit') !!}
+                                    Editar
                                 </button>
                             </a>
                             @csrf
