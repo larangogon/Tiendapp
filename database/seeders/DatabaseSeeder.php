@@ -17,6 +17,8 @@ class DatabaseSeeder extends Seeder
             [
                 PermissionsTableSeeder::class,
                 UserSeeder::class,
+                SizesTableSeeder::class,
+                TrademarksTableSeeder::class
             ]
         );
     }

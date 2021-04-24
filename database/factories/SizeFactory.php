@@ -22,7 +22,8 @@ class SizeFactory extends Factory
     public function definition()
     {
         return [
-            //
+            'name' => $this->faker->randomElement(['S', 'M', 'L'])
         ];
     }
 }
+

@@ -2,84 +2,96 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\TrademarkStoreRequest;
+use App\Http\Requests\TrademarkUpdateRequest;
+use App\Interfaces\InterfaceTrademarks;
 use App\Models\Trademark;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\View\View;
 
 class TrademarkController extends Controller
 {
+    protected $trademarks;
+
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * TrademarkController constructor.
+     * @param InterfaceTrademarks $trademarks
      */
-    public function index()
+    public function __construct(InterfaceTrademarks $trademarks)
     {
-        //
+        $this->trademarks = $trademarks;
+        $this->middleware('auth');
+        $this->middleware('verified');
+        $this->middleware('Status');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function index(): View
     {
-        //
+        $this->authorize('trademark.index');
+
+        $trademarks = Trademark::all(['id','name', 'code']);
+
+        return view('trademarks.index', [
+            'trademarks' => $trademarks
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param TrademarkStoreRequest $request
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function store(Request $request)
+    public function store(TrademarkStoreRequest $request): RedirectResponse
     {
-        //
+        $this->authorize('trademark.store');
+        $this->trademarks->store($request);
+        return redirect('trademarks');
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Trademark  $trademark
-     * @return \Illuminate\Http\Response
+     * @param Trademark $trademark
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(Trademark $trademark)
+    public function destroy(Trademark $trademark): RedirectResponse
     {
-        //
+        $trademark->destroy($trademark->id);
+        return redirect('trademarks');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Trademark  $trademark
-     * @return \Illuminate\Http\Response
+     * @param TrademarkUpdateRequest $request
+     * @param Trademark $trademark
+     * @return RedirectResponse
      */
-    public function edit(Trademark $trademark)
+    public function update(TrademarkUpdateRequest $request, Trademark $trademark): RedirectResponse
     {
-        //
+        $this->trademarks->update($request, $trademark);
+
+        return redirect('/trademarks')
+            ->with('success', 'Editado Satisfactoriamente');
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Trademark  $trademark
-     * @return \Illuminate\Http\Response
+     * @param Trademark $trademark
+     * @return View
      */
-    public function update(Request $request, Trademark $trademark)
+    public function edit(Trademark $trademark): View
     {
-        //
+        return view('trademarks.edit', [
+            'trademark' => $trademark,
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Trademark  $trademark
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function destroy(Trademark $trademark)
+    public function create(): view
     {
-        //
+        return view('trademarks.create');
     }
 }

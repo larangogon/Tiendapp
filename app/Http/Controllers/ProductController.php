@@ -2,84 +2,177 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProductStoreRequest;
+use App\Http\Requests\ProductUpdateRequest;
+use App\Interfaces\InterfaceProducts;
+use App\Models\Imagen;
 use App\Models\Product;
+use App\Models\Size;
+use App\Models\Trademark;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
+use Illuminate\Support\Facades\Session;
 
 class ProductController extends Controller
 {
+    protected $products;
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * ProductsController constructor.
+     * @param InterfaceProducts $products
      */
-    public function index()
+    public function __construct(InterfaceProducts $products)
     {
-        //
+        $this->products = $products;
+        $this->middleware('auth');
+        $this->middleware('Status');
+        $this->middleware('verified');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return View
      */
-    public function create()
+    public function index(Request $request): View
     {
-        //
+        $this->authorize('product.index');
+
+        $query = trim($request->get('search'));
+
+        $products = Product::where('name', 'LIKE', '%' . $query . '%')
+            ->orwhere('stock', 'LIKE', '%' . $query . '%')
+            ->orwhere('id', 'LIKE', '%' . $query . '%')
+            ->orderBy('id', 'asc')
+            ->paginate(15);
+
+        return view('products.index', [
+            'products' => $products,
+            'search'   => $query
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function store(Request $request)
+    public function create(): View
     {
-        //
+        $this->authorize('product.create');
+
+        $trademarks = Trademark::all(['id','name']);
+        $sizes      = Size::all(['id','name']);
+        $imagens   = Imagen::all(['id','name']);
+
+        return view('products.create', [
+            'trademarks' => $trademarks,
+            'sizes'      => $sizes,
+            'imagens'   => $imagens,
+        ]);
     }
 
     /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param ProductStoreRequest $request
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function show(Product $product)
+    public function store(ProductStoreRequest $request): RedirectResponse
     {
-        //
+        $this->authorize('product.store');
+
+        $this->products->store($request);
+
+        return redirect('/products')
+            ->with('success', 'producto Creado Satisfactoriamente');
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function edit(Product $product)
+    public function show(Product $product): View
     {
-        //
+        $this->authorize('product.show');
+
+        return view('products.show', compact('product'));
     }
 
     /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param Product $product
+     * @return View
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function update(Request $request, Product $product)
+    public function edit(Product $product): View
     {
-        //
+        $this->authorize('product.edit');
+        $trademarks = Trademark::all(['id','name']);
+        $sizes      = Size::all(['id','name']);
+
+        return view('products.edit', [
+            'product'    => $product,
+            'trademarks' => $trademarks,
+            'sizes'      => $sizes,
+        ]);
     }
 
     /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Product  $product
-     * @return \Illuminate\Http\Response
+     * @param ProductUpdateRequest $request
+     * @param Product $product
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
      */
-    public function destroy(Product $product)
+    public function update(ProductUpdateRequest $request, Product $product): RedirectResponse
     {
-        //
+        $this->authorize('product.update');
+
+        $this->products->update($request, $product);
+
+        return redirect('/products')
+            ->with('success', 'Producto Editado Satisfactoriamente');
+    }
+
+    /**
+     * @param Product $product
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function destroy(Product $product): RedirectResponse
+    {
+        $this->authorize('product.destroy');
+        $this->products->destroy($product);
+
+        return Redirect('/products')
+            ->with('success', 'Eliminado Satisfactoriamente !');
+    }
+
+    /**
+     * @param int $id
+     * @param Product $product
+     * @return RedirectResponse
+     */
+    public function destroyimagen(int $id, Product $product): RedirectResponse
+    {
+        $this->authorize('product.destroy');
+
+        $this->products->destroyimagen($id, $product);
+
+        return redirect()->back()
+            ->with('success', 'Imagen Eliminada Satisfactoriamente !');
+    }
+
+    /**
+     * @param Product $product
+     * @return RedirectResponse
+     * @throws \Illuminate\Auth\Access\AuthorizationException
+     */
+    public function active(Product $product): RedirectResponse
+    {
+        $this->authorize('product.status');
+
+        $this->products->active($product);
+
+        Session::flash('message', 'Estatus del producto Editado Satisfactoriamente !');
+
+        return redirect('/products');
     }
 }

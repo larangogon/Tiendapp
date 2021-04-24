@@ -43,7 +43,6 @@ class PermissionsTableSeeder extends Seeder
 
         $admin = Role::create([
             'name' => 'Administrator',
-            'guard_name' => 'web'
         ]);
 
         $admin->givePermissionTo([
@@ -74,7 +73,6 @@ class PermissionsTableSeeder extends Seeder
 
         $guest = Role::create([
             'name' => 'Guest',
-            'guard_name' => 'web'
         ]);
 
         $guest->givePermissionTo([

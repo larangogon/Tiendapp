@@ -30,7 +30,6 @@ class UsersTest extends TestCase
 
     public function testIndex()
     {
-        $this->withoutExceptionHandling();
         $response = $this->actingAs($this->user)->get(route('users.index'));
         $response
             ->assertStatus(200)

@@ -3,83 +3,50 @@
 namespace App\Http\Controllers;
 
 use App\Models\Size;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class SizeController extends Controller
 {
+    protected $sizes;
+
     /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
+     * SizeController constructor.
+     * @param InterfaceSizes $sizes
      */
-    public function index()
+    public function __construct(InterfaceSizes $sizes)
     {
-        //
+        $this->sizes = $sizes;
+        $this->middleware('auth');
+        $this->middleware('verified');
+        $this->middleware('Status');
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
+     * @return View
      */
-    public function create()
+    public function index(): View
     {
-        //
+        $this->authorize('size.index');
+
+        $sizes = Size::all(['id','name']);
+
+        return view('sizes.index', [
+            'sizes' => $sizes
+        ]);
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
+     * @param Request $request
+     * @return RedirectResponse
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
-        //
-    }
+        $this->authorize('size.store');
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Size  $size
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Size $size)
-    {
-        //
-    }
+        $this->sizes->store($request);
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Size  $size
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Size $size)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Size  $size
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Size $size)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Size  $size
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Size $size)
-    {
-        //
+        return redirect('sizes');
     }
 }
